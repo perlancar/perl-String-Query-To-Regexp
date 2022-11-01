@@ -1,0 +1,5 @@
+String-Query-To-Regexp-*
+.build
+*~
+nytprof*
+.DS_Store
