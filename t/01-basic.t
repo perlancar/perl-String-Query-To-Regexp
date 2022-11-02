@@ -18,13 +18,18 @@ my @data1 = (
     "barfoo",
 );
 
+my @data2 = (
+    "aa",
+    "a+",
+);
+
 my $re;
 
 subtest "basics" => sub {
     $re = query2re("foo");                                        is_deeply([grep {$_ =~ $re} @data1], [qw/foo foobar fooBAR barfoo/]);
     $re = query2re("foo", "bar");                                 is_deeply([grep {$_ =~ $re} @data1], [qw/foobar barfoo/]);
     $re = query2re("foo", "-bar");                                is_deeply([grep {$_ =~ $re} @data1], [qw/foo fooBAR/]);
-    note explain [grep {$_ =~ $re} @data1];
+    $re = query2re("a+");                                         is_deeply([grep {$_ =~ $re} @data2], [qw/a+/]); # test metachars
 };
 
 
