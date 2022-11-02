@@ -45,6 +45,12 @@ subtest "opt: bool" => sub {
     $re = query2re({bool=>'or'},"foo", "bar");                    is_deeply([grep {$_ =~ $re} @data1], [qw/foo bar foobar fooBAR barfoo/]);
 };
 
+subtest "opt: re" => sub {
+    $re = query2re({bool=>'or'}, "a", '/b/');                     is_deeply([grep {$_ =~ $re} "a", "b", "/b/"], [qw(a /b/)]);
+    $re = query2re({bool=>'or', re=>1}, "a", '/b/');              is_deeply([grep {$_ =~ $re} "a", "b", "/b/"], [qw(a b /b/)]);
+    $re = query2re({bool=>'or', re=>1}, "a", qr/b/);              is_deeply([grep {$_ =~ $re} "a", "b", "/b/"], [qw(a b /b/)]);
+};
+
 
 DONE_TESTING:
 done_testing();
