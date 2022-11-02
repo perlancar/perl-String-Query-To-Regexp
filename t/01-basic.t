@@ -3,6 +3,7 @@
 use 5.010001;
 use strict;
 use warnings;
+use Test::Exception;
 use Test::More 0.98;
 
 use String::Query::To::Regexp qw(
@@ -26,6 +27,8 @@ my @data2 = (
 my $re;
 
 subtest "basics" => sub {
+    dies_ok { query2re({foo=>1}) } 'unknown option -> dies';
+
     $re = query2re("foo");                                        is_deeply([grep {$_ =~ $re} @data1], [qw/foo foobar fooBAR barfoo/]);
     $re = query2re("foo", "bar");                                 is_deeply([grep {$_ =~ $re} @data1], [qw/foobar barfoo/]);
     $re = query2re("foo", "-bar");                                is_deeply([grep {$_ =~ $re} @data1], [qw/foo fooBAR/]);

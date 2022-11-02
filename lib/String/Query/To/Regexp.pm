@@ -13,11 +13,13 @@ our @EXPORT_OK = qw(query2re);
 # VERSION
 
 sub query2re {
-    my $opts = ref($_[0]) eq 'HASH' ? shift : {};
-    my $bool   = $opts->{bool} // 'and';
-    my $ci     = $opts->{ci};
-    my $word   = $opts->{word};
-    my $opt_re = $opts->{re};
+    my $opts = ref($_[0]) eq 'HASH' ? {%{shift()}} : {};
+    my $bool   = delete $opts->{bool} // 'and';
+    my $ci     = delete $opts->{ci};
+    my $word   = delete $opts->{word};
+    my $opt_re = delete $opts->{re};
+    die "query2re(): Unknown option(s): ".
+        join(", ", sort keys %$opts) if keys %$opts;
 
     return qr// unless @_;
     my @re_parts;
